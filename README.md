@@ -1,19 +1,21 @@
-# 🎓 ISMT College Website
+# 🎓 ISMT College Website (Demo Project)
 
-### A real college website, taken all the way from plain HTML to a fully automated, monitored, production-style deployment.
+### A college website taken all the way from plain HTML to an automated, monitored, production-style deployment.
 
 `HTML5` `Docker` `Kubernetes` `ArgoCD` `Grafana`
+
+> This is my own demo project. It is not the official ISMT website.
 
 ---
 
 ## 📖 What is this project?
 
-This started as a simple, responsive website for ISMT College — plain
-HTML, CSS, and JavaScript, no frameworks. That part is done and it
-works great on its own.
+This started as a simple, responsive website for a college: plain
+HTML, CSS, and JavaScript, built by me (jQuery is the only library). That part is done and it
+works well on its own.
 
 But the real goal of this project was bigger: **take an ordinary
-website and run it through the exact same process real companies use
+website and run it through the same process real companies use
 to ship and run software in production** — build it, test it
 automatically, package it, deploy it to a live cluster, and watch over
 it while it runs.
@@ -22,7 +24,7 @@ So this repo tells two stories at once:
 1. **A website** — pages, styling, a working contact form, a
    responsive layout.
 2. **A pipeline** — everything that happens *around* that website to
-   turn it into something reliably running in the cloud.
+   turn it into something reliably running on a cluster.
 
 ---
 
@@ -43,7 +45,7 @@ So this repo tells two stories at once:
 - Smooth fade-in animations as you scroll
 - Sticky navbar, back-to-top button, live countdown timer
 - Client-side form validation with helpful inline feedback
-- Clean, accessible markup with proper alt text and SEO-friendly titles
+- Alt text on images and SEO-friendly page titles
 
 **Screenshots:**
 
@@ -64,16 +66,13 @@ So this repo tells two stories at once:
 
 **Run it the simple way** (just the website, no DevOps needed):
 ```bash
-git clone https://github.com/kabi101010/-Ismt-website.git
+git clone https://github.com/kabindrashah/-Ismt-website.git
 # Open index.html with VS Code's "Live Server" extension
 ```
 
 ---
 
-## ⚙️ The Pipeline: How This Site Actually Gets Deployed
-
-Here's the part that turns "a website" into "a website running the
-way a real engineering team would run it."
+## ⚙️ The Pipeline: How This Site Gets Deployed
 
 ```
  You push code to GitHub
@@ -95,13 +94,12 @@ way a real engineering team would run it."
    (if one crashes, the other keeps serving traffic)
           │
           ▼
- Prometheus + Grafana quietly watch it
-   tracking traffic and confirming it's healthy,
-   24/7
+ Prometheus + Grafana watch it,
+   tracking traffic and confirming it is healthy
 ```
 
-In plain terms: **push code → it's automatically checked, built,
-deployed, and monitored — with no manual steps in between.**
+In plain terms: **push code → it is automatically checked, built,
+deployed, and monitored, with no manual steps in between.**
 
 ### 🐳 1. Docker — packaging the site
 
@@ -117,18 +115,13 @@ docker run -d -p 8081:80 ismt-website
 
 A GitHub Actions pipeline (`.github/workflows/ci.yml`) runs three
 checks every time code is pushed:
-- **HTML validation** — catches broken markup
+- **HTML validation** — reports markup problems (currently informational)
 - **Secret scanning** (Gitleaks) — catches accidentally committed
   passwords or keys
 - **Vulnerability scanning** (Trivy) — scans the built Docker image
   for known security issues
 
-> **A real judgment call:** this site was built from a third-party
-> template with some pre-existing markup quirks (harmless, but
-> technically not "valid" HTML5). Rather than rewriting someone else's
-> template line-by-line, HTML validation is treated as informational
-> rather than a hard blocker — a common, practical choice when
-> inheriting existing front-end code.
+**A practical decision:** the HTML validator reports some markup issues in my pages. I treat validation as informational for now so it does not block deployments, and fixing those issues is on my list.
 
 ### ☸️ 3. Kubernetes — running it reliably
 
@@ -168,7 +161,7 @@ into a live dashboard:
 
 ---
 
-## 🧠 What I actually learned building this
+## 🧠 What I learned building this
 
 - How to take a plain static site and containerize it properly
 - How CI/CD pipelines catch problems *before* they reach production
@@ -180,9 +173,9 @@ into a live dashboard:
   fix (RBAC), a PowerShell quoting issue that broke a command until I
   used a patch file instead, and a password reset after a tool's
   command name changed between versions
-- That real engineering sometimes means making a fair, practical
-  decision (like the HTML validation call above) instead of chasing
-  perfection on something outside the actual scope of the work
+- That real engineering sometimes means making a practical trade-off,
+  such as treating HTML validation as informational while I fix the
+  markup issues
 
 ---
 
@@ -196,5 +189,5 @@ Helm · ArgoCD · Prometheus · Grafana
 
 ## 🚀 What's Next
 
-- Add alerting so I get notified automatically if the site ever goes down
-- Apply this same pipeline to a real small organization's website
+- Fix the HTML validation errors and make validation a blocking step
+- Add alerting so I get notified automatically if the site goes down
